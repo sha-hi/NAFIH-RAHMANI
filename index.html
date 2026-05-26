@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Checker</title>
+    <meta name="description" content="Quickly check product prices and profit margins.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <h1>Price Checker</h1>
+    </header>
+
+    <main class="container">
+        <section class="stats-section" id="stats-section">
+            <div class="stat-card">
+                <h3>Total Products</h3>
+                <p id="stat-total">0</p>
+            </div>
+        </section>
+
+        <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+            <button id="show-add-form-btn" class="btn btn-primary" style="width: 100%; font-size: 1.125rem;">+ Add New Product</button>
+        </div>
+
+        <section class="search-section">
+            <div class="search-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="search-input" placeholder="Search products..." autocomplete="off">
+            </div>
+        </section>
+
+        <section class="form-section card hidden" id="form-section">
+            <h2 id="form-title">Add Product</h2>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <div class="form-group">
+                    <label for="product-name">Product Name</label>
+                    <input type="text" id="product-name" required placeholder="e.g., Apple">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="real-price">Real Price</label>
+                        <input type="number" id="real-price" required step="0.01" min="0" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="shop-price">Shop Price</label>
+                        <input type="number" id="shop-price" required step="0.01" min="0" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="save-btn">Save Product</button>
+                    <button type="button" class="btn btn-secondary hidden" id="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="products-section">
+            <div class="products-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                <h2>Products</h2>
+                <div class="toolbar" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-secondary btn-sm" id="view-list-btn">View List</button>
+                    <button class="btn btn-secondary btn-sm" id="share-all-btn">Share All</button>
+                    <button class="btn btn-secondary btn-sm" id="share-selected-btn">Share Selected</button>
+                </div>
+            </div>
+            <div class="select-all-container" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; display: none;" id="select-all-container">
+                <input type="checkbox" id="select-all">
+                <label for="select-all" style="font-weight: normal; cursor: pointer;">Select All</label>
+            </div>
+            <div id="products-container" class="products-container">
+                <!-- Product cards injected here -->
+            </div>
+            <div id="no-results" class="no-results hidden">
+                <p>No products found.</p>
+            </div>
+        </section>
+
+        <!-- View List Modal -->
+        <div id="view-list-modal" class="modal hidden">
+            <div class="modal-content card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2>View List</h2>
+                    <button id="close-modal-btn" class="btn btn-secondary btn-sm" style="padding: 0.25rem 0.5rem;">Close</button>
+                </div>
+                <textarea id="view-list-text" readonly style="width: 100%; height: 200px; padding: 0.5rem; font-family: monospace; border: 1px solid var(--border-color); border-radius: 4px; resize: none; margin-bottom: 1rem;"></textarea>
+                <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                    <button class="btn btn-primary" id="copy-list-btn">Copy to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
