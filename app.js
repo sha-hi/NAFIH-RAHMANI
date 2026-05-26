@@ -31,6 +31,11 @@ const closeModalBtn = document.getElementById('close-modal-btn');
 const viewListText = document.getElementById('view-list-text');
 const copyListBtn = document.getElementById('copy-list-btn');
 
+// Form Modal Elements
+const showAddFormBtn = document.getElementById('show-add-form-btn');
+const formModal = document.getElementById('form-modal');
+const closeFormBtn = document.getElementById('close-form-btn');
+
 // Format Currency
 const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
@@ -172,7 +177,6 @@ productForm.addEventListener('submit', (e) => {
                 lastUpdated: new Date().toISOString()
             };
         }
-        resetForm();
     } else {
         // Add new
         const newProduct = {
@@ -187,7 +191,7 @@ productForm.addEventListener('submit', (e) => {
 
     saveToLocalStorage();
     renderProducts(searchInput.value);
-    resetForm();
+    closeFormModal();
 });
 
 // Edit Product
@@ -200,16 +204,15 @@ window.editProduct = (id) => {
     realPriceInput.value = product.realPrice;
     shopPriceInput.value = product.shopPrice;
     
-    formTitle.textContent = 'Edit Product';
-    saveBtn.textContent = 'Update Product';
-    cancelBtn.classList.remove('hidden');
+    formTitle.textContent = 'Edit Product Details';
+    saveBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        Update Product
+    `;
     
-    // Show form and hide add button
-    formSection.classList.remove('hidden');
-    showAddFormBtn.classList.add('hidden');
-    
-    // Scroll to form
-    formSection.scrollIntoView({ behavior: 'smooth' });
+    // Show Modal Form
+    formModal.classList.remove('hidden');
+    productNameInput.focus();
 };
 
 // Delete Product
@@ -219,38 +222,39 @@ window.deleteProduct = (id) => {
         saveToLocalStorage();
         renderProducts(searchInput.value);
         
-        // If deleting the product currently being edited, reset form
+        // If deleting the product currently being edited, close form modal
         if (editingId === id) {
-            resetForm();
+            closeFormModal();
         }
     }
 };
 
-// Reset Form
-const resetForm = () => {
+// Close Form Modal
+const closeFormModal = () => {
     productForm.reset();
     editingId = null;
     formTitle.textContent = 'Add Product';
-    saveBtn.textContent = 'Save Product';
-    cancelBtn.classList.add('hidden');
-    
-    // Hide form and show add button
-    formSection.classList.add('hidden');
-    showAddFormBtn.classList.remove('hidden');
+    saveBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        Save Product
+    `;
+    formModal.classList.add('hidden');
 };
 
-// Cancel Edit
-cancelBtn.addEventListener('click', resetForm);
+// Cancel & Close triggers
+cancelBtn.addEventListener('click', closeFormModal);
+closeFormBtn.addEventListener('click', closeFormModal);
 
-// Show Add Form Toggle
+// Open Form Modal
 showAddFormBtn.addEventListener('click', () => {
-    formSection.classList.remove('hidden');
-    showAddFormBtn.classList.add('hidden');
+    editingId = null;
+    formTitle.textContent = 'Add Product';
+    saveBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        Save Product
+    `;
+    formModal.classList.remove('hidden');
     productNameInput.focus();
-    
-    // Ensure Cancel button acts as a way to just hide it when not editing
-    cancelBtn.classList.remove('hidden');
-    cancelBtn.textContent = 'Cancel';
 });
 
 // Search Feature
@@ -310,7 +314,7 @@ const generateListText = (selectedIds = null) => {
     sorted.forEach(p => {
         const margin = calculateMargin(p.realPrice, p.shopPrice);
         const marginSign = margin > 0 ? '+' : '';
-        text += `• ${p.name}\n  Real: ${formatCurrency(p.realPrice)} | Offered: ${formatCurrency(p.shopPrice)}\n  Diff: ${marginSign}${formatCurrency(margin)}\n\n`;
+        text += `• ${p.name}\n  Real: ${formatCurrency(p.realPrice)} | Offered: ${formatCurrency(p.shopPrice)}\n  PROFIT: ${marginSign}${formatCurrency(margin)}\n\n`;
     });
     
     text += "====================\n";

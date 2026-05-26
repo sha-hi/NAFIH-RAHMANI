@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Price Checker — Premium Retail Assistant</title>
+    <title>Price Checker — Professional Retail Dashboard</title>
     <meta name="description" content="Instantly compare shop prices vs market value and calculate profit margins.">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,95 +19,46 @@
                 </div>
                 <h1>Price Checker</h1>
             </div>
-            <span class="badge">Retail Tool</span>
+            <div class="header-actions">
+                <span class="badge">Professional Edition</span>
+            </div>
         </div>
     </header>
 
     <main class="container">
-        <div class="app-sidebar">
-            <!-- Dashboard Card -->
-            <section class="dashboard-section">
-            <div class="premium-stat-card">
-                <div class="stat-info">
-                    <h3>Inventory Overview</h3>
-                    <p class="stat-subtitle">Total products tracked in local storage</p>
-                    <div class="stat-count-container">
-                        <span id="stat-total" class="stat-number">0</span>
-                        <span class="stat-unit">Products</span>
-                    </div>
+        <!-- Dashboard Top Banner -->
+        <section class="dashboard-banner">
+            <div class="stat-card-compact">
+                <div class="stat-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                 </div>
-                <div class="stat-visual">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                <div class="stat-details">
+                    <span class="stat-val" id="stat-total">0</span>
+                    <span class="stat-lbl">Active Products</span>
                 </div>
             </div>
         </section>
 
-        <!-- Form & Trigger Area -->
-        <div class="action-trigger-container">
-            <button id="show-add-form-btn" class="btn btn-primary btn-lg">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                Add New Product
+        <!-- Controls Row (Search and Add Product Button in one line on wide screens) -->
+        <section class="controls-row">
+            <div class="search-box-wrapper">
+                <div class="search-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="search-input" placeholder="Search product catalogue..." autocomplete="off">
+                </div>
+            </div>
+            <button id="show-add-form-btn" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add Product
             </button>
-        </div>
-
-        <section class="form-section card hidden" id="form-section">
-            <div class="form-header">
-                <h2 id="form-title">Add Product</h2>
-                <p class="form-subtitle">Enter real vs offered price to calculate margin</p>
-            </div>
-            <form id="product-form">
-                <input type="hidden" id="product-id">
-                
-                <div class="form-group">
-                    <label for="product-name">Product Name</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="product-name" required placeholder="e.g., Organic Honey">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="real-price">Real Price (Market)</label>
-                        <div class="input-wrapper prefix">
-                            <span class="currency-prefix">$</span>
-                            <input type="number" id="real-price" required step="0.01" min="0" placeholder="0.00">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="shop-price">Shop Price (Offered)</label>
-                        <div class="input-wrapper prefix">
-                            <span class="currency-prefix">$</span>
-                            <input type="number" id="shop-price" required step="0.01" min="0" placeholder="0.00">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary" id="save-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                        Save Product
-                    </button>
-                    <button type="button" class="btn btn-secondary hidden" id="cancel-btn">Cancel</button>
-                </div>
-            </form>
         </section>
 
-        <!-- Search Bar -->
-        <section class="search-section">
-            <div class="search-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="search-input" placeholder="Search products..." autocomplete="off">
-            </div>
-        </section>
-
-        </div>
-
-        <!-- Products Section -->
-        <section class="products-section">
+        <!-- Main Workspace -->
+        <section class="workspace-card card">
             <div class="products-header">
-                <h2>Products List</h2>
+                <h2>Product Records</h2>
                 <div class="toolbar">
-                    <button class="btn btn-toolbar" id="view-list-btn" title="View as formatted text">
+                    <button class="btn btn-toolbar" id="view-list-btn" title="View text version">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                         View Text
                     </button>
@@ -127,19 +78,67 @@
                 <label class="custom-checkbox-container select-all-label">
                     <input type="checkbox" id="select-all">
                     <span class="checkmark"></span>
-                    <span class="label-text">Select All Products</span>
+                    <span class="label-text">Select all records</span>
                 </label>
             </div>
 
             <div id="products-container" class="products-container">
-                <!-- Product cards injected here -->
+                <!-- Product list items will be injected here -->
             </div>
             
             <div id="no-results" class="no-results hidden">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <p>No products found matching your search.</p>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <p>No products found match your search.</p>
             </div>
         </section>
+
+        <!-- Product Form Modal (Slide Up/Popup Model) -->
+        <div id="form-modal" class="modal hidden">
+            <div class="modal-content card">
+                <div class="modal-header">
+                    <h2 id="form-title">Add Product</h2>
+                    <button id="close-form-btn" class="btn-close" aria-label="Close modal">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <form id="product-form">
+                    <div class="modal-body">
+                        <input type="hidden" id="product-id">
+                        
+                        <div class="form-group">
+                            <label for="product-name">Product Name</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="product-name" required placeholder="e.g., Organic Honey">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="real-price">Real Price (Market)</label>
+                                <div class="input-wrapper prefix">
+                                    <span class="currency-prefix">$</span>
+                                    <input type="number" id="real-price" required step="0.01" min="0" placeholder="0.00">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="shop-price">Shop Price (Offered)</label>
+                                <div class="input-wrapper prefix">
+                                    <span class="currency-prefix">$</span>
+                                    <input type="number" id="shop-price" required step="0.01" min="0" placeholder="0.00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="save-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                            Save Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <!-- View List Modal -->
         <div id="view-list-modal" class="modal hidden">
