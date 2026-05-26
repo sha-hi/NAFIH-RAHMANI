@@ -3,93 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Price Checker</title>
-    <meta name="description" content="Quickly check product prices and profit margins.">
+    <title>Price Checker — Premium Retail Assistant</title>
+    <meta name="description" content="Instantly compare shop prices vs market value and calculate profit margins.">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="app-header">
-        <h1>Price Checker</h1>
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                </div>
+                <h1>Price Checker</h1>
+            </div>
+            <span class="badge">Retail Tool</span>
+        </div>
     </header>
 
     <main class="container">
-        <section class="stats-section" id="stats-section">
-            <div class="stat-card">
-                <h3>Total Products</h3>
-                <p id="stat-total">0</p>
+        <div class="app-sidebar">
+            <!-- Dashboard Card -->
+            <section class="dashboard-section">
+            <div class="premium-stat-card">
+                <div class="stat-info">
+                    <h3>Inventory Overview</h3>
+                    <p class="stat-subtitle">Total products tracked in local storage</p>
+                    <div class="stat-count-container">
+                        <span id="stat-total" class="stat-number">0</span>
+                        <span class="stat-unit">Products</span>
+                    </div>
+                </div>
+                <div class="stat-visual">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                </div>
             </div>
         </section>
 
-        <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
-            <button id="show-add-form-btn" class="btn btn-primary" style="width: 100%; font-size: 1.125rem;">+ Add New Product</button>
+        <!-- Form & Trigger Area -->
+        <div class="action-trigger-container">
+            <button id="show-add-form-btn" class="btn btn-primary btn-lg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add New Product
+            </button>
         </div>
 
-        <section class="search-section">
-            <div class="search-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="search-input" placeholder="Search products..." autocomplete="off">
-            </div>
-        </section>
-
         <section class="form-section card hidden" id="form-section">
-            <h2 id="form-title">Add Product</h2>
+            <div class="form-header">
+                <h2 id="form-title">Add Product</h2>
+                <p class="form-subtitle">Enter real vs offered price to calculate margin</p>
+            </div>
             <form id="product-form">
                 <input type="hidden" id="product-id">
+                
                 <div class="form-group">
                     <label for="product-name">Product Name</label>
-                    <input type="text" id="product-name" required placeholder="e.g., Apple">
+                    <div class="input-wrapper">
+                        <input type="text" id="product-name" required placeholder="e.g., Organic Honey">
+                    </div>
                 </div>
+                
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="real-price">Real Price</label>
-                        <input type="number" id="real-price" required step="0.01" min="0" placeholder="0.00">
+                        <label for="real-price">Real Price (Market)</label>
+                        <div class="input-wrapper prefix">
+                            <span class="currency-prefix">$</span>
+                            <input type="number" id="real-price" required step="0.01" min="0" placeholder="0.00">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="shop-price">Shop Price</label>
-                        <input type="number" id="shop-price" required step="0.01" min="0" placeholder="0.00">
+                        <label for="shop-price">Shop Price (Offered)</label>
+                        <div class="input-wrapper prefix">
+                            <span class="currency-prefix">$</span>
+                            <input type="number" id="shop-price" required step="0.01" min="0" placeholder="0.00">
+                        </div>
                     </div>
                 </div>
+                
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary" id="save-btn">Save Product</button>
+                    <button type="submit" class="btn btn-primary" id="save-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        Save Product
+                    </button>
                     <button type="button" class="btn btn-secondary hidden" id="cancel-btn">Cancel</button>
                 </div>
             </form>
         </section>
 
+        <!-- Search Bar -->
+        <section class="search-section">
+            <div class="search-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="search-input" placeholder="Search products..." autocomplete="off">
+            </div>
+        </section>
+
+        </div>
+
+        <!-- Products Section -->
         <section class="products-section">
-            <div class="products-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
-                <h2>Products</h2>
-                <div class="toolbar" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <button class="btn btn-secondary btn-sm" id="view-list-btn">View List</button>
-                    <button class="btn btn-secondary btn-sm" id="share-all-btn">Share All</button>
-                    <button class="btn btn-secondary btn-sm" id="share-selected-btn">Share Selected</button>
+            <div class="products-header">
+                <h2>Products List</h2>
+                <div class="toolbar">
+                    <button class="btn btn-toolbar" id="view-list-btn" title="View as formatted text">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        View Text
+                    </button>
+                    <button class="btn btn-toolbar" id="share-all-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        Share All
+                    </button>
+                    <button class="btn btn-toolbar" id="share-selected-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                        Share Selected
+                    </button>
                 </div>
             </div>
-            <div class="select-all-container" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; display: none;" id="select-all-container">
-                <input type="checkbox" id="select-all">
-                <label for="select-all" style="font-weight: normal; cursor: pointer;">Select All</label>
+
+            <!-- Custom Select All Container -->
+            <div class="select-all-container" id="select-all-container">
+                <label class="custom-checkbox-container select-all-label">
+                    <input type="checkbox" id="select-all">
+                    <span class="checkmark"></span>
+                    <span class="label-text">Select All Products</span>
+                </label>
             </div>
+
             <div id="products-container" class="products-container">
                 <!-- Product cards injected here -->
             </div>
+            
             <div id="no-results" class="no-results hidden">
-                <p>No products found.</p>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <p>No products found matching your search.</p>
             </div>
         </section>
 
         <!-- View List Modal -->
         <div id="view-list-modal" class="modal hidden">
             <div class="modal-content card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h2>View List</h2>
-                    <button id="close-modal-btn" class="btn btn-secondary btn-sm" style="padding: 0.25rem 0.5rem;">Close</button>
+                <div class="modal-header">
+                    <h2>Formatted Price List</h2>
+                    <button id="close-modal-btn" class="btn-close" aria-label="Close modal">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
                 </div>
-                <textarea id="view-list-text" readonly style="width: 100%; height: 200px; padding: 0.5rem; font-family: monospace; border: 1px solid var(--border-color); border-radius: 4px; resize: none; margin-bottom: 1rem;"></textarea>
-                <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-                    <button class="btn btn-primary" id="copy-list-btn">Copy to Clipboard</button>
+                <div class="modal-body">
+                    <p class="modal-subtitle">You can copy or review the text below before sending it to clients or partners.</p>
+                    <textarea id="view-list-text" readonly></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="copy-list-btn-close" onclick="document.getElementById('view-list-modal').classList.add('hidden')">Close</button>
+                    <button class="btn btn-primary" id="copy-list-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy to Clipboard
+                    </button>
                 </div>
             </div>
         </div>

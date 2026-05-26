@@ -31,10 +31,6 @@ const closeModalBtn = document.getElementById('close-modal-btn');
 const viewListText = document.getElementById('view-list-text');
 const copyListBtn = document.getElementById('copy-list-btn');
 
-// Form Toggle Elements
-const showAddFormBtn = document.getElementById('show-add-form-btn');
-const formSection = document.getElementById('form-section');
-
 // Format Currency
 const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
@@ -45,7 +41,7 @@ const formatCurrency = (value) => {
 
 // Format Date
 const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    const options = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     return new Date(dateString).toLocaleDateString('en-US', options);
 };
 
@@ -64,7 +60,7 @@ const saveToLocalStorage = () => {
 const updateStats = () => {
     statTotal.textContent = products.length;
     if (products.length > 0) {
-        selectAllContainer.style.display = 'flex';
+        selectAllContainer.style.display = 'block';
     } else {
         selectAllContainer.style.display = 'none';
     }
@@ -94,30 +90,40 @@ const renderProducts = (query = '') => {
             const card = document.createElement('div');
             card.className = 'product-card';
             card.innerHTML = `
-                <div class="product-header">
-                    <div style="display:flex; align-items:center; gap: 0.5rem;">
+                <div class="product-info-col">
+                    <label class="custom-checkbox-container">
                         <input type="checkbox" class="product-select" data-id="${product.id}">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="product-details">
                         <h3 class="product-name">${product.name}</h3>
+                        <span class="product-date">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="date-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            ${formatDate(product.lastUpdated)}
+                        </span>
                     </div>
-                    <span class="product-date">Updated: ${formatDate(product.lastUpdated)}</span>
                 </div>
-                <div class="product-prices">
-                    <div class="price-item">
+                <div class="product-prices-grid">
+                    <div class="price-pill real">
                         <span class="price-label">Real Price</span>
                         <span class="price-value">${formatCurrency(product.realPrice)}</span>
                     </div>
-                    <div class="price-item">
+                    <div class="price-pill shop">
                         <span class="price-label">Shop Price</span>
                         <span class="price-value">${formatCurrency(product.shopPrice)}</span>
                     </div>
-                    <div class="price-item">
-                        <span class="price-label">Difference</span>
-                        <span class="price-value ${marginClass}">${marginSign}${formatCurrency(margin)}</span>
+                    <div class="price-pill margin ${marginClass}">
+                        <span class="price-label">Margin</span>
+                        <span class="price-value">${marginSign}${formatCurrency(margin)}</span>
                     </div>
                 </div>
                 <div class="product-actions">
-                    <button class="btn btn-edit btn-sm" onclick="editProduct('${product.id}')">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteProduct('${product.id}')">Delete</button>
+                    <button class="btn btn-icon btn-edit" onclick="editProduct('${product.id}')" title="Edit Product">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    </button>
+                    <button class="btn btn-icon btn-danger" onclick="deleteProduct('${product.id}')" title="Delete Product">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </button>
                 </div>
             `;
             productsContainer.appendChild(card);
@@ -129,7 +135,15 @@ const renderProducts = (query = '') => {
     
     // Add event listeners to checkboxes
     document.querySelectorAll('.product-select').forEach(cb => {
-        cb.addEventListener('change', updateSelectAllCheckbox);
+        cb.addEventListener('change', (e) => {
+            const card = e.target.closest('.product-card');
+            if (e.target.checked) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+            updateSelectAllCheckbox();
+        });
     });
 };
 
@@ -259,6 +273,12 @@ selectAllCheckbox.addEventListener('change', (e) => {
     const isChecked = e.target.checked;
     document.querySelectorAll('.product-select').forEach(cb => {
         cb.checked = isChecked;
+        const card = cb.closest('.product-card');
+        if (isChecked) {
+            card.classList.add('selected');
+        } else {
+            card.classList.remove('selected');
+        }
     });
 });
 
@@ -281,21 +301,23 @@ const generateListText = (selectedIds = null) => {
         return "No products selected.";
     }
 
-    let text = "PRICE LIST\\n";
-    text += "----------\\n";
+    let text = "PRICE LIST\n";
+    text += "====================\n";
     
     // Sort alphabetically for the text list
     const sorted = [...listProducts].sort((a, b) => a.name.localeCompare(b.name));
     
     sorted.forEach(p => {
-        text += `${p.name} - Shop Price: ${formatCurrency(p.shopPrice)} (Real: ${formatCurrency(p.realPrice)})\\n`;
+        const margin = calculateMargin(p.realPrice, p.shopPrice);
+        const marginSign = margin > 0 ? '+' : '';
+        text += `• ${p.name}\n  Real: ${formatCurrency(p.realPrice)} | Offered: ${formatCurrency(p.shopPrice)}\n  Diff: ${marginSign}${formatCurrency(margin)}\n\n`;
     });
     
-    text += "----------\\n";
-    text += `Total Items: ${listProducts.length}\\n`;
-    text += `Generated on: ${formatDate(new Date().toISOString())}`;
+    text += "====================\n";
+    text += `Total Items: ${listProducts.length}\n`;
+    text += `Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`;
     
-    return text.replace(/\\n/g, '\n'); // handle literal escaped newlines just in case
+    return text;
 };
 
 // View List Action
@@ -309,10 +331,13 @@ viewListBtn.addEventListener('click', () => {
 copyListBtn.addEventListener('click', () => {
     viewListText.select();
     document.execCommand('copy');
-    const originalText = copyListBtn.textContent;
-    copyListBtn.textContent = 'Copied!';
+    const originalText = copyListBtn.innerHTML;
+    copyListBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Copied!
+    `;
     setTimeout(() => {
-        copyListBtn.textContent = originalText;
+        copyListBtn.innerHTML = originalText;
     }, 2000);
 });
 
